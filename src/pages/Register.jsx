@@ -1,122 +1,80 @@
-import { useState } from 'react';
-import CenteredPage from '../components/CenteredPage';
+// src/pages/Register.jsx
+import { useState } from "react";
+import axios from "axios";
+import { useNavigate } from "react-router-dom";
+import { toast } from "react-toastify";
+import CenteredPage from "../components/CenteredPage";
 
 export default function Register() {
   const [form, setForm] = useState({
-    username: '',
-    habboUsername: '',
-    email: '',
-    password: '',
+    username: "",
+    habboUsername: "",
+    email: "",
+    password: "",
   });
 
-  const [message, setMessage] = useState(null);
+  const navigate = useNavigate();
 
-  const handleChange = (e) => {
-    setForm({
-      ...form,
-      [e.target.name]: e.target.value,
-    });
-  };
+  const API_URL = import.meta.env.PROD
+    ? "https://fes-backend.onrender.com/api/user"
+    : "http://localhost:8080/api/user";
 
-  const validateEmail = (email) => {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
-  };
+  const handleChange = (e) =>
+    setForm({ ...form, [e.target.name]: e.target.value });
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setMessage(null);
+    const { username, habbousername, email, password } = form;
 
-    // VALIDACIONES
-    if (!form.username || !form.habboUsername || !form.email || !form.password) {
-      setMessage('Todos los campos son obligatorios.');
-      return;
-    }
-
-    if (!validateEmail(form.email)) {
-      setMessage('El correo no tiene un formato válido.');
-      return;
-    }
-
-    if (form.password.length < 6) {
-      setMessage('La contraseña debe tener al menos 6 caracteres.');
+    if (!username || !habbousername || !email || !password) {
+      toast.error("Todos los campos son obligatorios");
       return;
     }
 
     try {
-      const res = await fetch('http://localhost:8080/api/user/registro', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(form),
-      });
-
-      if (!res.ok) {
-        const errorData = await res.json();
-        setMessage(errorData.message || 'Error en el registro');
-        return;
-      }
-
-      setMessage('Registro exitoso ✅');
+      await axios.post(`${API_URL}/registro`, form);
+      toast.success("Registro exitoso");
+      setTimeout(() => navigate("/login"), 1500);
     } catch (err) {
-      setMessage('Error de conexión con el servidor');
+      toast.error("Error al registrarse");
     }
   };
 
   return (
     <CenteredPage>
-      <h2 className="text-3xl font-bold text-blue-900 mb-6 text-center">Registro</h2>
-      <form className="space-y-4" onSubmit={handleSubmit}>
-        <div>
-          <label className="block text-gray-800 mb-1">Username</label>
-          <input
-            name="username"
-            value={form.username}
-            onChange={handleChange}
-            placeholder="Ej: Spartan123"
-            className="w-full p-3 border border-gray-300 rounded"
-          />
-        </div>
-        <div>
-          <label className="block text-gray-800 mb-1">Habbo Username</label>
-          <input
-            name="habboUsername"
-            value={form.habboUsername}
-            onChange={handleChange}
-            placeholder="Ej: HabboSoldier"
-            className="w-full p-3 border border-gray-300 rounded"
-          />
-        </div>
-        <div>
-          <label className="block text-gray-800 mb-1">Email</label>
-          <input
-            type="email"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            placeholder="ejemplo@correo.com"
-            className="w-full p-3 border border-gray-300 rounded"
-          />
-        </div>
-        <div>
-          <label className="block text-gray-800 mb-1">Password</label>
-          <input
-            type="password"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            placeholder="********"
-            className="w-full p-3 border border-gray-300 rounded"
-          />
-        </div>
-        <button
-          type="submit"
-          className="w-full bg-green-600 text-white py-3 rounded hover:bg-green-700 transition font-semibold"
-        >
+      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
+        <h2 className="text-2xl font-bold mb-2 text-center text-blue-800">
+          Registro
+        </h2>
+        <input
+          name="username"
+          placeholder="Username"
+          onChange={handleChange}
+          className="input"
+        />
+        <input
+          name="habbousername"
+          placeholder="Habbo Username"
+          onChange={handleChange}
+          className="input"
+        />
+        <input
+          name="email"
+          type="email"
+          placeholder="Email"
+          onChange={handleChange}
+          className="input"
+        />
+        <input
+          name="password"
+          type="password"
+          placeholder="Password"
+          onChange={handleChange}
+          className="input"
+        />
+        <button type="submit" className="btn-primary mt-2">
           Registrarse
         </button>
-        {message && (
-          <p className="mt-4 text-center text-sm text-red-700">{message}</p>
-        )}
       </form>
     </CenteredPage>
   );

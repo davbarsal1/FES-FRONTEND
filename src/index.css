@@ -2,6 +2,30 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer utilities {
+  .animate-fade-in {
+    animation: fadeIn 0.3s ease-out forwards;
+  }
+
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: scale(0.95);
+    }
+    to {
+      opacity: 1;
+      transform: scale(1);
+    }
+  }
+}
+
+.input {
+  @apply border border-gray-300 rounded px-3 py-2 w-full text-black;
+}
+
+.btn-primary {
+  @apply bg-blue-800 text-white py-2 px-4 rounded hover:bg-blue-900;
+}
 
 :root {
   font-family: system-ui, Avenir, Helvetica, Arial, sans-serif;
