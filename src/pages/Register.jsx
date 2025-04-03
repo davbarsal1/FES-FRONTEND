@@ -1,81 +1,92 @@
-// src/pages/Register.jsx
 import { useState } from "react";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import CenteredPage from "../components/CenteredPage";
+import Navbar from "../components/Navbar";
+import CenteredBox from "../components/CenteredBox";
 
 export default function Register() {
   const [form, setForm] = useState({
     username: "",
-    habboUsername: "",
+    habbousername: "",
     email: "",
     password: "",
   });
 
   const navigate = useNavigate();
 
-  const API_URL = import.meta.env.PROD
-    ? "https://fes-backend.onrender.com/api/user"
-    : "http://localhost:8080/api/user";
+  const API = import.meta.env.PROD
+    ? "https://fes-backend.onrender.com/api/user/registro"
+    : "http://localhost:8080/api/user/registro";
 
-  const handleChange = (e) =>
+  const handleChange = (e) => {
     setForm({ ...form, [e.target.name]: e.target.value });
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { username, habbousername, email, password } = form;
-
-    if (!username || !habbousername || !email || !password) {
-      toast.error("Todos los campos son obligatorios");
-      return;
-    }
-
     try {
-      await axios.post(`${API_URL}/registro`, form);
+      await axios.post(API, form);
       toast.success("Registro exitoso");
-      setTimeout(() => navigate("/login"), 1500);
-    } catch (err) {
+      setTimeout(() => navigate("/login"), 2000);
+    } catch {
       toast.error("Error al registrarse");
     }
   };
 
   return (
-    <CenteredPage>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <h2 className="text-2xl font-bold mb-2 text-center text-blue-800">
-          Registro
-        </h2>
-        <input
-          name="username"
-          placeholder="Username"
-          onChange={handleChange}
-          className="input"
-        />
-        <input
-          name="habbousername"
-          placeholder="Habbo Username"
-          onChange={handleChange}
-          className="input"
-        />
-        <input
-          name="email"
-          type="email"
-          placeholder="Email"
-          onChange={handleChange}
-          className="input"
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="Password"
-          onChange={handleChange}
-          className="input"
-        />
-        <button type="submit" className="btn-primary mt-2">
-          Registrarse
-        </button>
-      </form>
-    </CenteredPage>
+    <div className="w-screen h-screen flex flex-col bg-gradient-to-br from-black via-zinc-900 to-zinc-800 text-white">
+      <Navbar />
+      <div className="flex flex-1 items-center justify-center px-4">
+        <ToastContainer />
+        <CenteredBox>
+          <h2 className="text-2xl font-bold mb-6">Registro</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              name="username"
+              placeholder="Username"
+              className="w-full px-3 py-2 rounded border border-black text-black"
+              value={form.username}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="text"
+              name="habbousername"
+              placeholder="Habbo Username"
+              className="w-full px-3 py-2 rounded border border-black text-black"
+              value={form.habbousername}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="email"
+              name="email"
+              placeholder="Correo electrónico"
+              className="w-full px-3 py-2 rounded border border-black text-black"
+              value={form.email}
+              onChange={handleChange}
+              required
+            />
+            <input
+              type="password"
+              name="password"
+              placeholder="Contraseña"
+              className="w-full px-3 py-2 rounded border border-black text-black"
+              value={form.password}
+              onChange={handleChange}
+              required
+            />
+            <button
+              type="submit"
+              className="w-full bg-black text-yellow-400 font-semibold py-2 rounded hover:bg-yellow-500 hover:text-black transition"
+            >
+              Registrarse
+            </button>
+          </form>
+        </CenteredBox>
+      </div>
+    </div>
   );
 }

@@ -1,81 +1,76 @@
 import { useState } from "react";
 import axios from "axios";
+import { toast, ToastContainer } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import { toast } from "react-toastify";
-import CenteredPage from "../components/CenteredPage";
 import { useUser } from "../context/UserContext";
+import Navbar from "../components/Navbar";
+import CenteredBox from "../components/CenteredBox";
 
 export default function Login() {
-  const [form, setForm] = useState({ email: "", password: "" });
-  const navigate = useNavigate();
+  const [username, setUsername] = useState("");
+  const [password, setPassword] = useState("");
   const { login } = useUser();
+  const navigate = useNavigate();
 
-  const API_URL = import.meta.env.PROD
-    ? "https://fes-backend.onrender.com/api/user"
-    : "http://localhost:8080/api/user";
-
-  const handleChange = (e) => {
-    setForm({ ...form, [e.target.name]: e.target.value });
-  };
+  const API = import.meta.env.PROD
+    ? "https://fes-backend.onrender.com/api/user/login"
+    : "http://localhost:8080/api/user/login";
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    const { username, password } = form;
-
-    if (!username || !password) {
-      toast.error("Complete todos los campos");
-      return;
-    }
-
     try {
-      const res = await axios.post(`${API_URL}/login`, form);
+      const res = await axios.post(API, { username, password });
+      toast.success("Inicio de sesión exitoso");
 
-      if (res.status === 200) {
-        // obtener datos del usuario para usar en el contexto
-        const userData = await axios.get(`${API_URL}/getUser?username=${username}`);
-        login(userData.data);
-        toast.success("Bienvenido");
-        setTimeout(() => navigate("/admin"), 1500);
-      } else {
-          console.log(res);
-        toast.error("Respuesta inesperada del servidor");
-      }
+      const userRes = await axios.get(
+        `${API.replace("/login", "/getUser")}?username=${username}`
+      );
 
-    } catch (err) {
-      if (err.response?.status === 401) {
-        toast.error("Credenciales incorrectas");
-      } else if (err.response?.status === 408) {
-        toast.warn("Servidor ocupado, intente de nuevo");
+      login(userRes.data);
+
+      if (userRes.data.userType === "ADMIN") {
+        navigate("/admin");
       } else {
-        toast.error("Error al iniciar sesión");
+        navigate("/dashboard");
       }
+    } catch {
+      toast.error("Credenciales incorrectas");
     }
   };
 
   return (
-    <CenteredPage>
-      <form onSubmit={handleSubmit} className="flex flex-col gap-3">
-        <h2 className="text-2xl font-bold mb-2 text-center text-blue-800">
-          Iniciar Sesión
-        </h2>
-        <input
-          name="username"
-          type="user"
-          placeholder="Username"
-          onChange={handleChange}
-          className="input"
-        />
-        <input
-          name="password"
-          type="password"
-          placeholder="Contraseña"
-          onChange={handleChange}
-          className="input"
-        />
-        <button type="submit" className="btn-primary mt-2">
-          Ingresar
-        </button>
-      </form>
-    </CenteredPage>
+    <div className="w-screen h-screen flex flex-col bg-gradient-to-br from-black via-zinc-900 to-zinc-800 text-white">
+      <Navbar />
+      <div className="flex flex-1 items-center justify-center px-4">
+        <ToastContainer />
+        <CenteredBox>
+          <h2 className="text-2xl font-bold mb-6">Iniciar Sesión</h2>
+          <form onSubmit={handleSubmit} className="space-y-4">
+            <input
+              type="text"
+              placeholder="Username"
+              className="w-full px-3 py-2 rounded border border-black text-black"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              required
+            />
+            <input
+              type="password"
+              placeholder="Contraseña"
+              className="w-full px-3 py-2 rounded border border-black text-black"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              required
+            />
+            <button
+              type="submit"
+              className="w-full bg-black text-yellow-400 font-semibold py-2 rounded hover:bg-yellow-500 hover:text-black transition"
+            >
+              Ingresar
+            </button>
+          </form>
+        </CenteredBox>
+      </div>
+    </div>
   );
 }
