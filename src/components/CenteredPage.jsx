@@ -1,3 +1,5 @@
+
+// src/components/CenteredPage.jsx
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import Navbar from "./Navbar";
@@ -10,10 +12,12 @@ export default function CenteredPage({ children }) {
       {/* Navbar superior */}
       <Navbar />
 
-      {/* Contenido centrado */}
-      <div className="flex-1 flex items-center justify-center px-4">
-        {children}
-      </div>
+      {/* Contenido centrado debajo del navbar */}
+      <main className="flex-1 flex items-center justify-center px-4 py-10">
+        <div className="bg-zinc-900 p-8 rounded shadow-md w-full max-w-md">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }

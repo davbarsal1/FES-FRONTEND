@@ -31,8 +31,6 @@ export default function Contacto() {
       return;
     }
 
-    // Aquí enviarías con EmailJS o a tu backend (ejemplo: fetch/post)
-
     console.log("Formulario enviado:", form);
 
     toast.success("Consulta enviada correctamente. ¡Gracias!", {
@@ -40,7 +38,6 @@ export default function Contacto() {
     });
 
     setForm({
-      nombre: "",
       habbo: "",
       asunto: "",
       mensaje: "",
@@ -48,72 +45,63 @@ export default function Contacto() {
   };
 
   return (
-    <div className="w-screen min-h-screen bg-gradient-to-br from-blue-900 via-gray-700 to-green-800 text-white">
+
+        <div className="w-screen min-h-screen flex flex-col bg-gradient-to-br from-black via-zinc-900 to-zinc-800 text-white overflow-y-auto">
       <Navbar />
       <ToastContainer />
 
-      <div className="max-w-3xl mx-auto bg-white text-gray-900 p-8 rounded-lg shadow-lg mt-24 mb-10">
-        <h1 className="text-3xl font-bold text-center text-blue-900 mb-6">Formulario de Contacto</h1>
-        <p className="text-center text-gray-600 mb-8">
-          ¿Tenés dudas, sugerencias o algo que comunicar? Completá este formulario y nos pondremos en contacto contigo.
+      <div className="max-w-3xl mx-auto bg-zinc-900 text-white p-8 rounded-lg shadow-xl mt-24 mb-10 border border-yellow-600">
+        <h1 className="text-3xl font-extrabold text-center text-yellow-400 mb-6">
+          Formulario de Contacto
+        </h1>
+        <p className="text-center text-gray-300 mb-8">
+          ¿Tenés dudas, sugerencias o algo que comunicar? Completa este formulario y nos pondremos en contacto contigo.
         </p>
 
         <form onSubmit={handleSubmit} className="space-y-6">
-          <div>
-            <label className="block text-sm font-semibold mb-1">Nombre de contacto</label>
-            <input
-              type="text"
-              name="nombre"
-              value={form.nombre}
-              onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded"
-              placeholder="Ej: Juan Pérez"
-              required
-            />
-          </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-1">Nombre de Habbo</label>
+            <label className="block text-sm font-medium text-yellow-300 mb-1">Nombre de Habbo</label>
             <input
               type="text"
               name="habbo"
               value={form.habbo}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded"
+              className="w-full p-3 bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-400"
               placeholder="Ej: chatido00"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-1">Asunto</label>
+            <label className="block text-sm font-medium text-yellow-300 mb-1">Asunto</label>
             <input
               type="text"
               name="asunto"
               value={form.asunto}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded"
+              className="w-full p-3 bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-400"
               placeholder="Ej: Sugerencia / Reporte / Reclamo"
               required
             />
           </div>
 
           <div>
-            <label className="block text-sm font-semibold mb-1">Motivo de consulta</label>
+            <label className="block text-sm font-medium text-yellow-300 mb-1">Motivo de consulta</label>
             <textarea
               name="mensaje"
               rows="5"
               value={form.mensaje}
               onChange={handleChange}
-              className="w-full p-3 border border-gray-300 rounded"
-              placeholder="Escribe tu mensaje aquí..."
+              className="w-full p-3 bg-gray-800 border border-gray-600 rounded text-white placeholder-gray-400"
+              placeholder="Escribí tu mensaje aquí..."
               required
             />
           </div>
 
           <button
             type="submit"
-            className="w-full bg-green-600 text-white py-3 rounded font-semibold hover:bg-green-700 transition"
+            className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-3 rounded transition"
           >
             Enviar consulta
           </button>

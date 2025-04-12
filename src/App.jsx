@@ -8,25 +8,30 @@ import Login from "./pages/Login";
 import Escalafon from "./pages/Escalafon";
 import Constitucion from "./pages/Constitucion";
 import Contacto from "./pages/Contacto";
-import Placeholder from "./pages/Placeholder";
+import AdministracionInfo from "./pages/AdministracionInfo";
+import DGAOInfo from "./pages/DGAOInfo";
 
 // Layouts y protección
 import DashboardLayout from "./components/DashboardLayout";
 import DashboardGeneralLayout from "./components/DashboardGeneralLayout";
 import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./components/AdminRoute";
+import MandoRoute from "./components/MandoRoute";
 
 // Dashboard general (usuarios logueados)
 import DashboardGeneralHome from "./pages/dashboard/DashboardGeneralHome";
 import PeticionForm from "./pages/dashboard/PeticionForm";
 import MisPeticiones from "./pages/dashboard/MisPeticiones";
 import MiTiempo from "./pages/dashboard/MiTiempo";
+import PerfilUsuario from "./pages/dashboard/PerfilUsuario"; // ✅ NUEVA
 
 // Dashboard admin (ADMIN y MANDO)
 import DashboardHome from "./pages/dashboard/DashboardHome";
 import Usuarios from "./pages/dashboard/Usuarios";
 import PeticionesAdmin from "./pages/dashboard/PeticionesAdmin";
 import TiempoAdmin from "./pages/dashboard/TiempoAdmin";
+import PDAUsuarios from "./pages/dashboard/PDAUsuarios";
+import RegistrarActividad from "./pages/dashboard/RegistrarActividad";
 
 function App() {
   return (
@@ -38,9 +43,8 @@ function App() {
       <Route path="/escalafon" element={<Escalafon />} />
       <Route path="/constitucion" element={<Constitucion />} />
       <Route path="/contacto" element={<Contacto />} />
-      <Route path="/mandos" element={<Placeholder title="Mandos" />} />
-      <Route path="/jud-marchas" element={<Placeholder title="JUD Marchas" />} />
-      <Route path="/jud-ataque" element={<Placeholder title="JUD Ataque" />} />
+      <Route path="/administracion" element={<AdministracionInfo />} />
+      <Route path="/dgao" element={<DGAOInfo />} />
 
       {/* Panel general (EMPLEADO, MANDO, ADMIN) */}
       <Route
@@ -54,22 +58,31 @@ function App() {
         <Route index element={<DashboardGeneralHome />} />
         <Route path="peticion" element={<PeticionForm />} />
         <Route path="mis-peticiones" element={<MisPeticiones />} />
-        <Route path="tiempo" element={<MiTiempo />} />
+        <Route path="perfil" element={<PerfilUsuario />} /> {/* ✅ NUEVA */}
       </Route>
 
       {/* Panel admin (solo ADMIN y MANDO acceden aquí) */}
       <Route
         path="/admin"
         element={
-          <AdminRoute>
+          <MandoRoute>
             <DashboardLayout />
-          </AdminRoute>
+          </MandoRoute>
         }
       >
         <Route index element={<DashboardHome />} />
-        <Route path="usuarios" element={<Usuarios />} />
+        <Route
+          path="usuarios"
+          element={
+            <AdminRoute>
+              <Usuarios />
+            </AdminRoute>
+          }
+        />
         <Route path="peticiones" element={<PeticionesAdmin />} />
         <Route path="tiempo" element={<TiempoAdmin />} />
+        <Route path="pda-usuarios" element={<PDAUsuarios />} />
+        <Route path="registrar-actividad" element={<RegistrarActividad />} />
       </Route>
     </Routes>
   );

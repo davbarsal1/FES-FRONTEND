@@ -1,4 +1,3 @@
-// src/pages/dashboard/MisPeticiones.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { useUser } from "../../context/UserContext";
@@ -29,42 +28,47 @@ export default function MisPeticiones() {
   const estadoColor = (estado) => {
     switch (estado) {
       case "APROBADA":
-        return "text-green-600 font-semibold";
+        return "text-green-500 font-bold";
       case "RECHAZADA":
-        return "text-red-600 font-semibold";
+        return "text-red-500 font-bold";
       case "PENDIENTE":
-        return "text-yellow-600 font-semibold";
+        return "text-yellow-400 font-bold";
       default:
-        return "text-gray-600";
+        return "text-white";
     }
   };
 
   return (
-    <div className="p-4 max-w-5xl mx-auto">
-      <h2 className="text-2xl font-bold text-blue-800 mb-4">Mis Peticiones</h2>
+    <div className="p-6 max-w-5xl mx-auto text-white">
+      <h2 className="text-3xl font-bold text-yellow-400 mb-6">Mis Peticiones</h2>
       {peticiones.length === 0 ? (
-        <p>No has enviado ninguna petición aún.</p>
+        <p className="text-gray-400">No has enviado ninguna petición aún.</p>
       ) : (
-        <table className="w-full text-sm text-gray-700 bg-white rounded-xl shadow overflow-hidden">
-          <thead className="bg-blue-100 text-blue-900 font-semibold text-left">
-            <tr>
-              <th className="px-4 py-3">Rango</th>
-              <th className="px-4 py-3">Tipo Usuario</th>
-              <th className="px-4 py-3">Motivo</th>
-              <th className="px-4 py-3">Estado</th>
-            </tr>
-          </thead>
-          <tbody>
-            {peticiones.map((p) => (
-              <tr key={p.id} className="hover:bg-blue-50 border-b last:border-none text-center">
-                <td className="px-4 py-3">{p.rango ?? "-"}</td>
-                <td className="px-4 py-3">{p.userType ?? "-"}</td>
-                <td className="px-4 py-3 text-left">{p.texto}</td>
-                <td className={`px-4 py-3 ${estadoColor(p.estado)}`}>{p.estado}</td>
+        <div className="overflow-auto bg-black p-4 rounded-xl border border-yellow-600 shadow-md">
+          <table className="w-full text-sm bg-black text-white rounded-xl">
+            <thead className="bg-yellow-600 text-black">
+              <tr className="text-center">
+                <th className="px-4 py-3">Rango</th>
+                <th className="px-4 py-3">Tipo Usuario</th>
+                <th className="px-4 py-3">Motivo</th>
+                <th className="px-4 py-3">Estado</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody>
+              {peticiones.map((p) => (
+                <tr
+                  key={p.id}
+                  className="text-center border-t border-yellow-800 hover:bg-yellow-900/10"
+                >
+                  <td className="px-4 py-2">{p.rango ?? "-"}</td>
+                  <td className="px-4 py-2">{p.userType ?? "-"}</td>
+                  <td className="px-4 py-2 text-left">{p.texto}</td>
+                  <td className={`px-4 py-2 ${estadoColor(p.estado)}`}>{p.estado}</td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );

@@ -1,76 +1,67 @@
 import { useState } from "react";
 import axios from "axios";
-import { toast, ToastContainer } from "react-toastify";
+import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import { useUser } from "../context/UserContext";
-import Navbar from "../components/Navbar";
-import CenteredBox from "../components/CenteredBox";
+import CenteredPage from "../components/CenteredPage";
 
 export default function Login() {
-  const [username, setUsername] = useState("");
-  const [password, setPassword] = useState("");
   const { login } = useUser();
   const navigate = useNavigate();
+  const [form, setForm] = useState({
+    username: "",
+    password: "",
+  });
 
-  const API = import.meta.env.PROD
+  const API_URL = import.meta.env.PROD
     ? "https://fes-backend.onrender.com/api/user/login"
     : "http://localhost:8080/api/user/login";
+
+  const handleChange = (e) => {
+    setForm((prev) => ({ ...prev, [e.target.name]: e.target.value }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post(API, { username, password });
-      toast.success("Inicio de sesión exitoso");
-
-      const userRes = await axios.get(
-        `${API.replace("/login", "/getUser")}?username=${username}`
-      );
-
-      login(userRes.data);
-
-      if (userRes.data.userType === "ADMIN") {
-        navigate("/admin");
-      } else {
-        navigate("/dashboard");
-      }
-    } catch {
-      toast.error("Credenciales incorrectas");
+      const res = await axios.post(API_URL, form);
+      login(res.data); // ✅ GUARDAMOS TODO EL USUARIO
+      toast.success("Sesión iniciada");
+      navigate("/dashboard");
+    } catch (err) {
+      toast.error(err.response?.data || "Error al iniciar sesión");
     }
   };
 
   return (
-    <div className="w-screen h-screen flex flex-col bg-gradient-to-br from-black via-zinc-900 to-zinc-800 text-white">
-      <Navbar />
-      <div className="flex flex-1 items-center justify-center px-4">
-        <ToastContainer />
-        <CenteredBox>
-          <h2 className="text-2xl font-bold mb-6">Iniciar Sesión</h2>
-          <form onSubmit={handleSubmit} className="space-y-4">
-            <input
-              type="text"
-              placeholder="Username"
-              className="w-full px-3 py-2 rounded border border-black text-black"
-              value={username}
-              onChange={(e) => setUsername(e.target.value)}
-              required
-            />
-            <input
-              type="password"
-              placeholder="Contraseña"
-              className="w-full px-3 py-2 rounded border border-black text-black"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
-              required
-            />
-            <button
-              type="submit"
-              className="w-full bg-black text-yellow-400 font-semibold py-2 rounded hover:bg-yellow-500 hover:text-black transition"
-            >
-              Ingresar
-            </button>
-          </form>
-        </CenteredBox>
-      </div>
-    </div>
+    <CenteredPage>
+      <h2 className="text-2xl font-bold text-yellow-400 mb-4 text-center">Iniciar Sesión</h2>
+      <form onSubmit={handleSubmit} className="space-y-4">
+        <input
+          type="text"
+          name="username"
+          placeholder="Username"
+          value={form.username}
+          onChange={handleChange}
+          required
+          className="w-full px-3 py-2 rounded bg-black text-white border border-gray-700"
+        />
+        <input
+          type="password"
+          name="password"
+          placeholder="Contraseña"
+          value={form.password}
+          onChange={handleChange}
+          required
+          className="w-full px-3 py-2 rounded bg-black text-white border border-gray-700"
+        />
+        <button
+          type="submit"
+          className="w-full bg-yellow-400 text-black font-bold py-2 rounded hover:bg-yellow-500 transition"
+        >
+          Ingresar
+        </button>
+      </form>
+    </CenteredPage>
   );
 }

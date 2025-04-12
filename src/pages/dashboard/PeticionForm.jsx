@@ -1,4 +1,3 @@
-// src/pages/dashboard/PeticionForm.jsx
 import { useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
@@ -11,6 +10,7 @@ export default function PeticionForm() {
     rango: "",
     userType: "",
     texto: "",
+    mision: ""
   });
 
   const RANGOS = [
@@ -36,28 +36,28 @@ export default function PeticionForm() {
         rango: form.rango || null,
         userType: form.userType || null,
         texto: form.texto,
+        rangoEspecifico: form.mision || null,
       });
 
       toast.success("Petición enviada");
-      setForm({ rango: "", userType: "", texto: "" });
+      setForm({ rango: "", userType: "", texto: "", mision: "" });
     } catch (err) {
       toast.error("Error al enviar petición");
     }
   };
 
   return (
-    <div className="max-w-xl mx-auto bg-white p-6 rounded shadow">
-      <h2 className="text-2xl font-bold text-blue-800 mb-4">
-        Solicitar cambio
-      </h2>
-      <form onSubmit={enviarPeticion} className="space-y-4">
+    <div className="max-w-2xl mx-auto bg-black/80 text-white p-8 rounded-xl border border-yellow-500 shadow-md mt-10">
+      <h2 className="text-3xl font-bold text-yellow-400 mb-6 text-center">Solicitar Cambio</h2>
+
+      <form onSubmit={enviarPeticion} className="space-y-6">
         <div>
-          <label>Nuevo Rango (opcional)</label>
+          <label className="block mb-1 font-semibold text-yellow-300">Nuevo Rango (opcional)</label>
           <select
             name="rango"
             value={form.rango}
             onChange={handleChange}
-            className="input"
+            className="w-full p-2 rounded bg-black border border-yellow-500 text-white"
           >
             <option value="">-- Seleccionar --</option>
             {RANGOS.map((r) => (
@@ -65,13 +65,14 @@ export default function PeticionForm() {
             ))}
           </select>
         </div>
+
         <div>
-          <label>Nuevo Tipo de Usuario (opcional)</label>
+          <label className="block mb-1 font-semibold text-yellow-300">Nuevo Tipo de Usuario (opcional)</label>
           <select
             name="userType"
             value={form.userType}
             onChange={handleChange}
-            className="input"
+            className="w-full p-2 rounded bg-black border border-yellow-500 text-white"
           >
             <option value="">-- Seleccionar --</option>
             {TIPOS.map((t) => (
@@ -79,17 +80,35 @@ export default function PeticionForm() {
             ))}
           </select>
         </div>
+
         <div>
-          <label>Motivo</label>
+          <label className="block mb-1 font-semibold text-yellow-300">Nueva Misión (opcional)</label>
+          <input
+            type="text"
+            name="mision"
+            placeholder="Ej: Director de Eventos"
+            value={form.mision}
+            onChange={handleChange}
+            className="w-full p-2 rounded bg-black border border-yellow-500 text-white"
+          />
+        </div>
+
+        <div>
+          <label className="block mb-1 font-semibold text-yellow-300">Motivo</label>
           <textarea
             name="texto"
             value={form.texto}
             onChange={handleChange}
-            className="input"
+            className="w-full p-2 rounded bg-black border border-yellow-500 text-white"
             required
-          ></textarea>
+            rows={4}
+          />
         </div>
-        <button type="submit" className="btn-primary w-full">
+
+        <button
+          type="submit"
+          className="w-full bg-yellow-500 hover:bg-yellow-600 text-black font-bold py-2 rounded transition"
+        >
           Enviar Petición
         </button>
       </form>

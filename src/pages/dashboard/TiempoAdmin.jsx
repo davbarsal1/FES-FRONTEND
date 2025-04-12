@@ -1,11 +1,12 @@
-// src/pages/dashboard/TiempoAdmin.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
+import { useUser } from "../../context/UserContext";
 
 export default function TiempoAdmin() {
   const [usuarios, setUsuarios] = useState([]);
   const [busqueda, setBusqueda] = useState("");
+  const { usuario } = useUser();
 
   const API_BASE = import.meta.env.PROD
     ? "https://fes-backend.onrender.com/api"
@@ -28,7 +29,9 @@ export default function TiempoAdmin() {
         return {
           username: user.username,
           segundosTotales: tiempo?.segundosTotales || 0,
-          activo: tiempo?.activo || false
+          activo: tiempo?.activo || false,
+          estado: tiempo?.estado || "sala",
+          iniciadoPor: tiempo?.iniciadoPor || "",
         };
       });
 
@@ -40,7 +43,8 @@ export default function TiempoAdmin() {
 
   const iniciar = async (username) => {
     try {
-      await axios.post(`${API_BASE}/tiempo/iniciar?username=${username}`);
+      const iniciadoPor = usuario?.username || "Sistema";
+      await axios.post(`${API_BASE}/tiempo/iniciar?username=${username}&iniciadoPor=${iniciadoPor}`);
       toast.success(`Sesión iniciada para ${username}`);
       cargar();
     } catch {
@@ -58,6 +62,15 @@ export default function TiempoAdmin() {
     }
   };
 
+  const cambiarEstado = async (username, nuevoEstado) => {
+    try {
+      await axios.post(`${API_BASE}/tiempo/estado?username=${username}&estado=${nuevoEstado}`);
+      cargar();
+    } catch {
+      toast.error("Error al cambiar el estado");
+    }
+  };
+
   const formatearTiempo = (segundos) => {
     const h = Math.floor(segundos / 3600);
     const m = Math.floor((segundos % 3600) / 60);
@@ -65,67 +78,111 @@ export default function TiempoAdmin() {
     return `${h}h ${m}m ${s}s`;
   };
 
+  const reiniciar = async () => {
+    const confirmado = window.confirm("Esta acción borrará todos los tiempos de la semana. ¿Deseas continuar?");
+    if (!confirmado) return;
+
+    try {
+      await axios.delete(`${API_BASE}/tiempo/reiniciar`);
+      toast.success("Tiempos reiniciados");
+      cargar();
+    } catch {
+      toast.error("Error al reiniciar");
+    }
+  };
+
   useEffect(() => {
     cargar();
   }, []);
 
   return (
-    <div className="p-4 max-w-5xl mx-auto">
-      <h2 className="text-2xl font-bold text-blue-800 mb-4">Control de Tiempo en Sala</h2>
+    <div className="p-6 max-w-[1600px] mx-auto">
+      <div className="flex justify-between items-center mb-6">
+        <h2 className="text-3xl font-bold text-yellow-400">Control de Tiempo en Sala</h2>
+        <button
+          onClick={reiniciar}
+          className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow"
+        >
+          Reiniciar Tiempos
+        </button>
+      </div>
 
       <input
         type="text"
         placeholder="Buscar por usuario..."
         value={busqueda}
         onChange={(e) => setBusqueda(e.target.value)}
-        className="mb-4 px-4 py-2 border rounded w-full max-w-sm shadow"
+        className="mb-6 px-4 py-2 border border-gray-300 rounded w-full max-w-sm shadow"
       />
 
       {usuarios.length === 0 ? (
         <p>No hay usuarios aún.</p>
       ) : (
-        <table className="w-full text-sm text-gray-700 bg-white rounded-xl shadow overflow-hidden">
-          <thead className="bg-blue-100 text-blue-900 font-semibold text-left">
-            <tr>
-              <th className="px-4 py-3">Usuario</th>
-              <th className="px-4 py-3">Tiempo Total</th>
-              <th className="px-4 py-3">Estado</th>
-              <th className="px-4 py-3">Acción</th>
-            </tr>
-          </thead>
-          <tbody>
-            {usuarios
-              .filter((u) =>
-                u.username.toLowerCase().includes(busqueda.toLowerCase())
-              )
-              .map((u) => (
-                <tr key={u.username} className="hover:bg-blue-50 border-b last:border-none text-center">
-                  <td className="px-4 py-3">{u.username}</td>
-                  <td className="px-4 py-3">{formatearTiempo(u.segundosTotales)}</td>
-                  <td className="px-4 py-3">
-                    {u.activo ? "🟢 En sala" : "⚪ Fuera"}
-                  </td>
-                  <td className="px-4 py-3">
-                    {u.activo ? (
+        <div className="overflow-auto bg-gray-900 text-white rounded-xl shadow-xl">
+          <table className="w-full text-sm">
+            <thead className="bg-yellow-700 text-white">
+              <tr className="text-center">
+                <th className="px-4 py-3 text-center">Usuario</th>
+                <th className="px-4 py-3 text-center">Tiempo Total</th>
+                <th className="px-4 py-3 text-center">Estado</th>
+                <th className="px-4 py-3 text-center">Iniciado por</th>
+                <th className="px-4 py-3 text-center">Acción</th>
+              </tr>
+            </thead>
+            <tbody>
+              {usuarios
+                .filter((u) =>
+                  u.username.toLowerCase().includes(busqueda.toLowerCase())
+                )
+                .map((u) => (
+                  <tr key={u.username} className="border-t border-gray-800 text-center">
+                    <td className="px-4 py-3">{u.username}</td>
+                    <td className="px-4 py-3">{formatearTiempo(u.segundosTotales)}</td>
+                    <td className="px-4 py-3 space-x-2">
                       <button
-                        onClick={() => detener(u.username)}
-                        className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
+                        className={`px-2 py-1 rounded text-xs font-semibold ${
+                          u.estado === "actividad" ? "bg-green-600" : "bg-gray-700"
+                        }`}
+                        onClick={() =>
+                          cambiarEstado(u.username, u.estado === "actividad" ? "sala" : "actividad")
+                        }
                       >
-                        Detener
+                        Actividad
                       </button>
-                    ) : (
                       <button
-                        onClick={() => iniciar(u.username)}
-                        className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded transition"
+                        className={`px-2 py-1 rounded text-xs font-semibold ${
+                          u.estado === "publicidad" ? "bg-blue-600" : "bg-gray-700"
+                        }`}
+                        onClick={() =>
+                          cambiarEstado(u.username, u.estado === "publicidad" ? "sala" : "publicidad")
+                        }
                       >
-                        Iniciar
+                        Publicidad
                       </button>
-                    )}
-                  </td>
-                </tr>
-              ))}
-          </tbody>
-        </table>
+                    </td>
+                    <td className="px-4 py-3">{u.iniciadoPor || "-"}</td>
+                    <td className="px-4 py-3">
+                      {u.activo ? (
+                        <button
+                          onClick={() => detener(u.username)}
+                          className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded transition"
+                        >
+                          Detener
+                        </button>
+                      ) : (
+                        <button
+                          onClick={() => iniciar(u.username)}
+                          className="bg-green-500 hover:bg-green-600 text-white px-3 py-1 rounded transition"
+                        >
+                          Iniciar
+                        </button>
+                      )}
+                    </td>
+                  </tr>
+                ))}
+            </tbody>
+          </table>
+        </div>
       )}
     </div>
   );
