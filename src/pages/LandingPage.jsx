@@ -4,7 +4,7 @@ import CenteredBox from "../components/CenteredBox";
 import axios from "axios";
 
 const API_URL = import.meta.env.PROD
-  ? "https://fes-backend.onrender.com/dummy"
+  ? "https://fes-backend.onrender.com/api/dummy"
   : "http://localhost:8080/api/dummy";
 
 export default function LandingPage() {
