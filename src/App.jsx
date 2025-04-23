@@ -18,12 +18,13 @@ import PrivateRoute from "./components/PrivateRoute";
 import AdminRoute from "./components/AdminRoute";
 import MandoRoute from "./components/MandoRoute";
 
-// Dashboard general (usuarios logueados)
+// Dashboard general (EMPLEADO, MANDO, ADMIN)
 import DashboardGeneralHome from "./pages/dashboard/DashboardGeneralHome";
 import PeticionForm from "./pages/dashboard/PeticionForm";
 import MisPeticiones from "./pages/dashboard/MisPeticiones";
 import MiTiempo from "./pages/dashboard/MiTiempo";
-import PerfilUsuario from "./pages/dashboard/PerfilUsuario"; // ✅ NUEVA
+import PerfilUsuario from "./pages/dashboard/PerfilUsuario";
+import Radio from "./pages/dashboard/Radio";
 
 // Dashboard admin (ADMIN y MANDO)
 import DashboardHome from "./pages/dashboard/DashboardHome";
@@ -32,6 +33,11 @@ import PeticionesAdmin from "./pages/dashboard/PeticionesAdmin";
 import TiempoAdmin from "./pages/dashboard/TiempoAdmin";
 import PDAUsuarios from "./pages/dashboard/PDAUsuarios";
 import RegistrarActividad from "./pages/dashboard/RegistrarActividad";
+import GestionarVentajas from "./pages/dashboard/GestionarVentajas";
+
+// NUEVOS COMPONENTES DE PUBLICIDAD
+import RegistrarPublicidad from "./pages/dashboard/RegistrarPublicidad";
+import HistorialPublicidad from "./pages/dashboard/HistorialPublicidad";
 
 function App() {
   return (
@@ -58,7 +64,9 @@ function App() {
         <Route index element={<DashboardGeneralHome />} />
         <Route path="peticion" element={<PeticionForm />} />
         <Route path="mis-peticiones" element={<MisPeticiones />} />
-        <Route path="perfil" element={<PerfilUsuario />} /> {/* ✅ NUEVA */}
+        <Route path="tiempo" element={<MiTiempo />} />
+        <Route path="perfil" element={<PerfilUsuario />} />
+        <Route path="radio" element={<Radio />} />
       </Route>
 
       {/* Panel admin (solo ADMIN y MANDO acceden aquí) */}
@@ -71,18 +79,14 @@ function App() {
         }
       >
         <Route index element={<DashboardHome />} />
-        <Route
-          path="usuarios"
-          element={
-            <AdminRoute>
-              <Usuarios />
-            </AdminRoute>
-          }
-        />
+        <Route path="usuarios" element={<AdminRoute><Usuarios /></AdminRoute>} />
         <Route path="peticiones" element={<PeticionesAdmin />} />
         <Route path="tiempo" element={<TiempoAdmin />} />
         <Route path="pda-usuarios" element={<PDAUsuarios />} />
         <Route path="registrar-actividad" element={<RegistrarActividad />} />
+        <Route path="ventajas" element={<AdminRoute><GestionarVentajas /></AdminRoute>} />
+        <Route path="registrar-publicidad" element={<RegistrarPublicidad />} />
+        <Route path="historial-publicidad" element={<HistorialPublicidad />} />
       </Route>
     </Routes>
   );

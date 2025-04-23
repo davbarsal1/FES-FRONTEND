@@ -3,7 +3,8 @@ import { useUser } from "../../context/UserContext";
 import axios from "axios";
 import { toast } from "react-toastify";
 import MiTiempo from "./MiTiempo";
-
+import MisVentajas from "./MisVentajas";
+import HistorialUsuarioPublicidad from "../../components/HistorialUsuarioPublicidad"
 export default function PerfilUsuario() {
   const { usuario } = useUser();
   const [actividades, setActividades] = useState([]);
@@ -164,9 +165,14 @@ export default function PerfilUsuario() {
 
         {/* 🎁 Ventajas */}
         <section className="bg-zinc-900 rounded-xl p-6 shadow-lg col-span-2">
-          <h2 className="text-2xl font-bold text-yellow-400 mb-4">🎁 Mis Ventajas</h2>
-          <p className="text-gray-400">Aquí verás tus privilegios o premios acumulados. (Próximamente)</p>
+          <MisVentajas />
         </section>
+        {/* 📣 Publicidades */}
+        <section className="bg-zinc-900 rounded-xl p-6 shadow-lg col-span-2">
+          <h2 className="text-2xl font-bold text-yellow-400 mb-4">📣 Publicidades Realizadas</h2>
+          <HistorialUsuarioPublicidad />
+        </section>
+
       </div>
     </div>
   );

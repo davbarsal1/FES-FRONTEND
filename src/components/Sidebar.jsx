@@ -14,28 +14,29 @@ export default function Sidebar() {
 
         <nav className="flex flex-col space-y-4 font-semibold">
           <NavLink to="/dashboard" end className="text-yellow-300">🏠 Panel General</NavLink>
-          <NavLink to="/dashboard/perfil" className="text-yellow-300">🧑‍💼 Mi Perfil</NavLink> {/* ✅ NUEVO */}
           <NavLink to="/dashboard/mis-peticiones" className="text-yellow-300">📋 Mis Peticiones</NavLink>
           <NavLink to="/dashboard/peticion" className="text-yellow-300">✉️ Solicitar Cambio</NavLink>
+          <NavLink to="/dashboard/perfil" className="text-yellow-300">👤 Perfil</NavLink>
+          <NavLink to="/dashboard/radio" className="text-yellow-300">📻 Radio</NavLink>
 
+          {/* Panel de MANDO en adelante */}
           {(tipo === "MANDO" || tipo === "ADMIN") && (
             <>
-              <NavLink to="/admin/tiempo" className="text-yellow-300">
-                ⏲ Control de Sala
-              </NavLink>
-              <NavLink to="/admin/pda-usuarios" className="text-yellow-300">
-                📊 Ver PDAs
-              </NavLink>
-              <NavLink to="/admin/registrar-actividad" className="text-yellow-300">
-                📝 Registrar Actividad
-              </NavLink>
+              <NavLink to="/admin/tiempo" className="text-yellow-300">⏲ Control de Sala</NavLink>
+              <NavLink to="/admin/pda-usuarios" className="text-yellow-300">📊 Ver PDAs</NavLink>
+              <NavLink to="/admin/registrar-actividad" className="text-yellow-300">📝 Registrar Actividad</NavLink>
+              <NavLink to="/admin/registrar-publicidad" className="text-yellow-300">📣 Registrar Publicidad</NavLink>
+              <NavLink to="/admin/historial-publicidad" className="text-yellow-300">📜 Historial Publicidad</NavLink>
             </>
           )}
 
+          {/* Solo ADMIN */}
           {tipo === "ADMIN" && (
             <>
+              <NavLink to="/admin" end className="text-yellow-300">🛠 Panel Admin</NavLink>
               <NavLink to="/admin/usuarios" className="text-yellow-300">👥 Gestión de Usuarios</NavLink>
               <NavLink to="/admin/peticiones" className="text-yellow-300">📩 Revisar Peticiones</NavLink>
+              <NavLink to="/admin/ventajas" className="text-yellow-300">🎖 Gestionar Ventajas</NavLink>
             </>
           )}
         </nav>
