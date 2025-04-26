@@ -94,4 +94,7 @@ body {
     color: #D1D5DB;
   }
 }
+html {
+  scroll-behavior: smooth;
+}
 

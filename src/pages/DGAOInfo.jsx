@@ -8,48 +8,78 @@ const dgaoData = {
           nombre: ".:Ramses:.",
           cargo: "Director General",
           habbo: ".:Ramses:.",
-        },
+        }
       ],
   "JUD de Marchas": [
     {
-      nombre: "Nana_1395",
+      nombre: "_Apolo_07_",
+      cargo: "Jefe de Unidad Departamental",
+      habbo: "_Apolo_07_",
+    },
+{
+            nombre: "chatido00",
+            cargo: "Comandante de Unidad Departamental",
+            habbo: "chatido00",
+          },
+  ],
+  "JUD de Ataque": [
+    {
+      nombre: "Miqa",
       cargo: "Jefa de Unidad Departamental",
-      habbo: "Nana_1395",
+      habbo: "Miqa",
+    },
+  ],
+  "JUD de Times": [
+    {
+      nombre: "guaumila",
+      cargo: "Jefa de Unidad Departamental",
+      habbo: "guaumila",
+    },
+{
+      nombre: "Lisaster",
+      cargo: "Encargada de times",
+      habbo: "Lisaster",
     },
 {
       nombre: "_Apolo_07_",
-      cargo: "Comandante de Unidad Departamental",
+      cargo: "Encargado de times",
       habbo: "_Apolo_07_",
     },
-  ],
-  "JUD de Entrenamientos": [
-    {
-      nombre: "guaumila",
-      cargo: "Supervisora de rutinas",
-      habbo: "guaumila",
+{
+      nombre: "Miqa",
+      cargo: "Encargada de times",
+      habbo: "Miqa",
     },
-  ],
-  "JUD de Exámenes": [
-    {
-      nombre: "JuanRyan",
-      cargo: "Encargado de exámenes finales",
-      habbo: "JuanRyan",
+{
+      nombre: "Majoangel.",
+      cargo: "Encargado de times",
+      habbo: "Majoangel.",
     },
-  ],
-  "JUD de Inteligencia": [
-    {
+{
       nombre: "dapapayalove",
-      cargo: "CORTANA",
+      cargo: "Encargada de times",
       habbo: "dapapayalove",
     },
-  ],
-  "JUD de Efectos y Automatización": [
-    {
-      nombre: "josedvb",
-      cargo: "Diseñador de Efectos y Automatización",
-      habbo: "josedvb",
+{
+      nombre: "jose-champion",
+      cargo: "Encargado de times",
+      habbo: "jose-champion",
     },
   ],
+  "JUD de Capacitación": [
+    {
+      nombre: "Lisaster",
+      cargo: "Jefa de Unidad Departamental",
+      habbo: "Lisaster",
+    },
+  ],
+  "JUD de TIC": [
+      {
+        nombre: "chatido00",
+        cargo: "Jefe de Unidad Departamental",
+        habbo: "chatido00",
+      },
+    ],
 };
 
 export default function DGAOInfo() {

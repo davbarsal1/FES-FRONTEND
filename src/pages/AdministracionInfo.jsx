@@ -8,7 +8,7 @@ const lideres = [
   },
   {
     nombre: "guaumila",
-    cargo: "PRINCESA",
+    cargo: "PRINCESA - JUD de Times",
     habbo: "guaumila",
   },
   {
@@ -18,7 +18,7 @@ const lideres = [
   },
   {
     nombre: "chatido00",
-    cargo: "NOBLE - Encargado de desarrollo",
+    cargo: "NOBLE - JUD de TIC",
     habbo: "chatido00",
   },
   {
