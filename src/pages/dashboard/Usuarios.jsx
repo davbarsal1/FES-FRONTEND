@@ -1,3 +1,4 @@
+// src/pages/dashboard/Usuarios.jsx
 import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
@@ -13,6 +14,7 @@ export default function Usuarios() {
   const [cambios, setCambios] = useState({});
   const [modalVisible, setModalVisible] = useState(false);
   const [usuarioSeleccionado, setUsuarioSeleccionado] = useState(null);
+  const [estadoRequisitos, setEstadoRequisitos] = useState({});
 
   const { usuario, login } = useUser();
   const navigate = useNavigate();
@@ -31,9 +33,26 @@ export default function Usuarios() {
   const obtenerUsuarios = async () => {
     try {
       const res = await axios.get(`${API_URL}`);
-      setUsuarios(res.data);
-      setCambios({});
+      const users = res.data;
+      setUsuarios(users);
       setCargando(false);
+
+      // Comprobar requisitos uno a uno
+      for (const u of users) {
+        try {
+          const result = await axios.get(`${API_URL}/requisitos-cumplidos?username=${u.username}`);
+          setEstadoRequisitos((prev) => ({
+            ...prev,
+            [u.username]: result.data === true,
+          }));
+        } catch {
+          setEstadoRequisitos((prev) => ({
+            ...prev,
+            [u.username]: false,
+          }));
+        }
+      }
+
     } catch {
       toast.error("Error al obtener los usuarios");
     }
@@ -132,6 +151,7 @@ export default function Usuarios() {
                 <th className="px-4 py-3">Rango</th>
                 <th className="px-4 py-3">Cambiar Rango</th>
                 <th className="px-4 py-3">Misión</th>
+                <th className="px-4 py-3">Cumple requisitos</th>
                 <th className="px-4 py-3">Acción</th>
               </tr>
             </thead>
@@ -178,6 +198,15 @@ export default function Usuarios() {
                         onChange={(e) => manejarCambio(u.username, "rangoEspecifico", e.target.value)}
                         className="w-full px-2 py-1 bg-gray-900 border border-yellow-600 rounded text-white"
                       />
+                    </td>
+                    <td className="px-4 py-2">
+                      {estadoRequisitos[u.username] === true ? (
+                        <span className="text-green-400 font-semibold">✅ Sí</span>
+                      ) : estadoRequisitos[u.username] === false ? (
+                        <span className="text-red-400 font-semibold">❌ No</span>
+                      ) : (
+                        <span className="text-gray-400">Cargando...</span>
+                      )}
                     </td>
                     <td className="px-4 py-2">
                       {mostrarBoton(u) && (

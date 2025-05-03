@@ -67,30 +67,31 @@ export default function Constitucion() {
   return (
     <div className="w-screen min-h-screen bg-gradient-to-br from-black via-gray-900 to-gray-800 text-white">
       <Navbar />
-      <div className="max-w-4xl mx-auto bg-zinc-900 text-white p-8 rounded-lg shadow-lg mt-24 mb-10 border border-yellow-500">
-        <h1 className="text-4xl font-extrabold text-center text-yellow-400 mb-8">
-          Constitución Marcial de la Fuerza Élite Spartan
-        </h1>
+      <div className="max-w-4xl mx-auto px-4 sm:px-6 md:px-8 pt-24 pb-12">
+        <div className="bg-zinc-900 rounded-lg shadow-lg border border-yellow-500 p-6 sm:p-8">
+          <h1 className="text-3xl sm:text-4xl font-extrabold text-center text-yellow-400 mb-6">
+            Constitución Marcial de la Fuerza Élite Spartan
+          </h1>
+          <p className="text-center text-gray-300 mb-10 text-sm sm:text-base">
+            Documento oficial que rige la estructura, deberes y derechos dentro del ejército F.E.S.
+          </p>
 
-        <p className="text-center text-gray-300 mb-10">
-          Documento oficial que rige la estructura, deberes y derechos dentro del ejército F.E.S.
-        </p>
+          {articulos.map((articulo, index) => (
+            <div key={index} className="mb-8">
+              <h2 className="text-xl sm:text-2xl font-bold text-yellow-300 mb-2">
+                {articulo.titulo}
+              </h2>
+              <p className="text-justify text-sm sm:text-base leading-relaxed text-gray-200">
+                {articulo.contenido}
+              </p>
+              <hr className="my-4 border-yellow-600/30" />
+            </div>
+          ))}
 
-        {articulos.map((articulo, index) => (
-          <div key={index} className="mb-8">
-            <h2 className="text-2xl font-bold text-yellow-300 mb-2">
-              {articulo.titulo}
-            </h2>
-            <p className="text-justify leading-relaxed text-gray-200">
-              {articulo.contenido}
-            </p>
-            <hr className="my-4 border-yellow-600/30" />
-          </div>
-        ))}
-
-        <p className="text-sm text-yellow-500 mt-8 italic text-center">
-          Esta constitución entra en vigor tras su publicación y puede ser modificada por el Líder Supremo y cúpula de poder.
-        </p>
+          <p className="text-xs sm:text-sm text-yellow-500 mt-8 italic text-center">
+            Esta constitución entra en vigor tras su publicación y puede ser modificada por el Líder Supremo y cúpula de poder.
+          </p>
+        </div>
       </div>
     </div>
   );

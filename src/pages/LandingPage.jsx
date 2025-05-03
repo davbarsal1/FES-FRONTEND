@@ -1,12 +1,73 @@
-// src/pages/LandingPage.jsx
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import Navbar from "../components/Navbar";
 import CenteredBox from "../components/CenteredBox";
-import { Link } from "react-router-dom";
 
 export default function LandingPage() {
+  const [estadoServidor, setEstadoServidor] = useState("cargando");
+
+  useEffect(() => {
+    const controller = new AbortController();
+
+    const comprobarServidor = async () => {
+      try {
+        const res = await fetch(
+          import.meta.env.PROD
+            ? "https://fes-backend.onrender.com/api/despierta"
+            : "http://localhost:8080/api/despierta",
+          { signal: controller.signal }
+        );
+        if (res.ok) {
+          setEstadoServidor("activo");
+        } else {
+          setEstadoServidor("inactivo");
+        }
+      } catch (error) {
+        if (error.name !== "AbortError") {
+          setEstadoServidor("inactivo");
+        }
+      }
+    };
+
+    const timeoutId = setTimeout(() => {
+      controller.abort();
+      setEstadoServidor("inactivo");
+    }, 5000);
+
+    comprobarServidor();
+
+    const intervalo = setInterval(() => {
+      if (estadoServidor === "inactivo") {
+        comprobarServidor();
+      }
+    }, 30000); // Reintenta cada 30s si está inactivo
+
+    return () => {
+      clearTimeout(timeoutId);
+      controller.abort();
+      clearInterval(intervalo);
+    };
+  }, [estadoServidor]);
+
+  const renderEstadoServidor = () => {
+    if (estadoServidor === "cargando") return null;
+    return (
+      <div
+        className={`fixed bottom-4 right-4 px-4 py-2 rounded shadow-lg text-sm font-medium transition z-50 ${
+          estadoServidor === "activo"
+            ? "bg-green-600 text-white"
+            : "bg-red-600 text-white"
+        }`}
+      >
+        Servidor {estadoServidor === "activo" ? "activo" : "inactivo"}
+      </div>
+    );
+  };
+
   return (
     <div className="w-screen min-h-screen flex flex-col bg-gradient-to-br from-black via-zinc-900 to-zinc-800 text-white overflow-y-auto">
       <Navbar />
+
       <main className="flex-1 flex flex-col items-center justify-center gap-32 py-20 px-4 scroll-smooth">
         {/* 🔰 Sección principal */}
         <section id="inicio">
@@ -94,6 +155,8 @@ export default function LandingPage() {
           </Link>
         </section>
       </main>
+
+      {renderEstadoServidor()}
     </div>
   );
 }

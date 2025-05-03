@@ -6,6 +6,7 @@ const VENTAJAS = ["GRUNT", "COBRA", "GRIZZLY", "SCORPION", "PELICAN", "FORERUNNE
 
 export default function GestionarVentajas() {
   const [usuarios, setUsuarios] = useState([]);
+  const [busqueda, setBusqueda] = useState("");
   const [seleccionado, setSeleccionado] = useState("");
   const [ventaja, setVentaja] = useState("");
 
@@ -47,26 +48,51 @@ export default function GestionarVentajas() {
     cargar();
   }, []);
 
-  const ventajasUsuario = usuarios.find((u) => u.username === seleccionado)?.ventajas || {};
+  const usuarioFiltrado = usuarios.find((u) => u.username.toLowerCase() === seleccionado.toLowerCase());
+  const ventajasUsuario = usuarioFiltrado?.ventajas || {};
+
+  const sugerencias = busqueda
+    ? usuarios
+        .filter((u) => u.username.toLowerCase().includes(busqueda.toLowerCase()))
+        .slice(0, 5)
+    : [];
 
   return (
     <div className="p-6 text-white max-w-4xl mx-auto">
       <h2 className="text-3xl font-bold text-yellow-400 mb-6">Gestión de Ventajas</h2>
 
       <div className="flex flex-col md:flex-row gap-4 mb-6">
-        <select
-          onChange={(e) => setSeleccionado(e.target.value)}
-          className="bg-black border border-yellow-500 p-2 rounded text-white w-full"
-          value={seleccionado}
-        >
-          <option value="">Seleccionar usuario</option>
-          {usuarios.map((u) => (
-            <option key={u.username} value={u.username}>
-              {u.username}
-            </option>
-          ))}
-        </select>
+        {/* Búsqueda de usuario */}
+        <div className="relative w-full">
+          <input
+            type="text"
+            placeholder="Buscar usuario..."
+            value={busqueda}
+            onChange={(e) => {
+              setBusqueda(e.target.value);
+              setSeleccionado(""); // Resetear selección
+            }}
+            className="bg-black border border-yellow-500 p-2 rounded text-white w-full"
+          />
+          {sugerencias.length > 0 && (
+            <ul className="absolute bg-zinc-900 border border-yellow-500 mt-1 rounded z-10 w-full max-h-48 overflow-auto shadow">
+              {sugerencias.map((u) => (
+                <li
+                  key={u.username}
+                  onClick={() => {
+                    setSeleccionado(u.username);
+                    setBusqueda(u.username);
+                  }}
+                  className="px-4 py-2 hover:bg-yellow-500 hover:text-black cursor-pointer"
+                >
+                  {u.username}
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
 
+        {/* Selector de ventaja */}
         <select
           onChange={(e) => setVentaja(e.target.value)}
           className="bg-black border border-yellow-500 p-2 rounded text-white w-full"

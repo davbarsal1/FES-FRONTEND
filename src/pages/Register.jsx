@@ -32,50 +32,54 @@ export default function Register() {
 
   return (
     <CenteredPage>
-      <h2 className="text-2xl font-bold text-yellow-400 mb-4 text-center">Registro</h2>
-      <form onSubmit={handleSubmit} className="space-y-4">
-        <input
-          type="text"
-          name="username"
-          placeholder="Username"
-          value={form.username}
-          onChange={handleChange}
-          required
-          className="w-full px-3 py-2 rounded bg-black text-white border border-gray-700"
-        />
-        <input
-          type="text"
-          name="habbousername"
-          placeholder="Habbo Username"
-          value={form.habbousername}
-          onChange={handleChange}
-          className="w-full px-3 py-2 rounded bg-black text-white border border-gray-700"
-        />
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          value={form.email}
-          onChange={handleChange}
-          required
-          className="w-full px-3 py-2 rounded bg-black text-white border border-gray-700"
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Contraseña"
-          value={form.password}
-          onChange={handleChange}
-          required
-          className="w-full px-3 py-2 rounded bg-black text-white border border-gray-700"
-        />
-        <button
-          type="submit"
-          className="w-full bg-yellow-400 text-black font-bold py-2 rounded hover:bg-yellow-500 transition"
-        >
-          Registrarse
-        </button>
-      </form>
+      <div className="w-full max-w-md mx-auto bg-zinc-900 p-6 rounded-xl border border-yellow-600 shadow-md">
+        <h2 className="text-2xl md:text-3xl font-bold text-yellow-400 mb-6 text-center">
+          Crear cuenta
+        </h2>
+        <form onSubmit={handleSubmit} className="space-y-4">
+          <input
+            type="text"
+            name="username"
+            placeholder="Nombre de usuario"
+            value={form.username}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 rounded bg-black text-white border border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          />
+          <input
+            type="text"
+            name="habbousername"
+            placeholder="Habbo Username"
+            value={form.habbousername}
+            onChange={handleChange}
+            className="w-full px-4 py-2 rounded bg-black text-white border border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          />
+          <input
+            type="email"
+            name="email"
+            placeholder="Correo electrónico"
+            value={form.email}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 rounded bg-black text-white border border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          />
+          <input
+            type="password"
+            name="password"
+            placeholder="Contraseña"
+            value={form.password}
+            onChange={handleChange}
+            required
+            className="w-full px-4 py-2 rounded bg-black text-white border border-yellow-500 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+          />
+          <button
+            type="submit"
+            className="w-full bg-yellow-400 text-black font-semibold py-2 rounded hover:bg-yellow-500 transition"
+          >
+            Registrarse
+          </button>
+        </form>
+      </div>
     </CenteredPage>
   );
 }
