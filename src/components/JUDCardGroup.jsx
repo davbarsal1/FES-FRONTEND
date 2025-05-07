@@ -8,9 +8,9 @@ export default function JUDCardGroup({ titulo, miembros }) {
         {miembros.map((m) => {
           const cargoLower = m.cargo.toLowerCase();
           const esJefe =
-            cargoLower.includes("jefe") ||
-            cargoLower.includes("jefa") ||
-            cargoLower.includes("director");
+            cargoLower === "encargado" ||
+            cargoLower === "encargada" ||
+            cargoLower.includes("jefe");
 
           return (
             <div

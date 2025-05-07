@@ -3,82 +3,98 @@ import FullPageLayout from "../components/FullPageLayout";
 import JUDCardGroup from "../components/JUDCardGroup";
 
 const dgaoData = {
-    "Equipo Directivo": [
+    "Equipo Directivo - Coordinación de las Jefaturas de Unidad Departamental": [
         {
           nombre: ".:Ramses:.",
-          cargo: "Director General",
+          cargo: "Jefe de DGAO",
           habbo: ".:Ramses:.",
-        }
+        },
+
+        {
+                      nombre: "guaumila",
+                      cargo: "Subjefa de DGAO",
+                      habbo: "guaumila",
+                    }
+                ,{
+                               nombre: "xavierfeijoo-",
+                               cargo: "Director Administrativo",
+                               habbo: "xavierfeijoo-",
+                             },{
+                                             nombre: "Apolo07",
+                                             cargo: "Director Operativo",
+                                             habbo: "Apolo07",
+                                           },
       ],
-  "JUD de Marchas": [
+  "JUD de Marchas - Capacitación e instrucción para marchas": [
     {
-      nombre: "_Apolo_07_",
-      cargo: "Jefe de Unidad Departamental",
-      habbo: "_Apolo_07_",
+      nombre: "Apolo07",
+      cargo: "Encargado",
+      habbo: "Apolo07",
     },
 {
-            nombre: "chatido00",
-            cargo: "Comandante de Unidad Departamental",
-            habbo: "chatido00",
+            nombre: "Nana_1395",
+            cargo: "Subencargada",
+            habbo: "Nana_1395",
           },
   ],
-  "JUD de Ataque": [
+  "JUD de Ataque - Coordinación y planificación de ataques": [
     {
       nombre: "Miqa",
-      cargo: "Jefa de Unidad Departamental",
+      cargo: "Encargada",
       habbo: "Miqa",
-    },
+    },{
+            nombre: "@Basticos",
+            cargo: "Subencargado",
+            habbo: "@Basticos",
+          },
   ],
+  "JUD de Ocio": [
+      {
+        nombre: "guaumila",
+        cargo: "Encargada",
+        habbo: "guaumila",
+      },{
+              nombre: "p@=valeri=@q",
+              cargo: "Subencargada",
+              habbo: "p@=valeri=@q",
+            },
+    ],
+"JUD de RRHH": [
+      {
+        nombre: "majoangel.",
+        cargo: "Encargado",
+        habbo: "majoangel.",
+      },{
+              nombre: "PRLA.X3",
+              cargo: "Subencargada",
+              habbo: "PRLA.X3",
+            },
+    ],
   "JUD de Times": [
     {
-      nombre: "guaumila",
-      cargo: "Jefa de Unidad Departamental",
-      habbo: "guaumila",
-    },
-{
-      nombre: "Lisaster",
-      cargo: "Encargada de times",
-      habbo: "Lisaster",
-    },
-{
-      nombre: "_Apolo_07_",
-      cargo: "Encargado de times",
-      habbo: "_Apolo_07_",
-    },
-{
-      nombre: "Miqa",
-      cargo: "Encargada de times",
-      habbo: "Miqa",
-    },
-{
-      nombre: "Majoangel.",
-      cargo: "Encargado de times",
-      habbo: "Majoangel.",
-    },
-{
       nombre: "dapapayalove",
-      cargo: "Encargada de times",
+      cargo: "Encargada",
       habbo: "dapapayalove",
-    },
-{
-      nombre: "jose-champion",
-      cargo: "Encargado de times",
-      habbo: "jose-champion",
     },
   ],
   "JUD de Capacitación": [
     {
       nombre: "Lisaster",
-      cargo: "Jefa de Unidad Departamental",
+      cargo: "Encargada",
       habbo: "Lisaster",
     },
   ],
   "JUD de TIC": [
       {
         nombre: "chatido00",
-        cargo: "Jefe de Unidad Departamental",
+        cargo: "Encargado",
         habbo: "chatido00",
       },
+  {
+          nombre: "eltambo",
+          cargo: "Subencargado",
+          habbo: "eltambo",
+        },
     ],
 };
 

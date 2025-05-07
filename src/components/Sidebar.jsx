@@ -13,7 +13,6 @@ export default function Sidebar() {
         <h2 className="text-3xl font-extrabold mb-8 text-yellow-300">F.E.S</h2>
 
         <nav className="flex flex-col space-y-4 font-semibold">
-          <NavLink to="/dashboard" end className="text-yellow-300">🏠 Panel General</NavLink>
           <NavLink to="/dashboard/mis-peticiones" className="text-yellow-300">📋 Mis Peticiones</NavLink>
           <NavLink to="/dashboard/peticion" className="text-yellow-300">✉️ Solicitar Cambio</NavLink>
           <NavLink to="/dashboard/perfil" className="text-yellow-300">👤 Perfil</NavLink>
@@ -33,7 +32,6 @@ export default function Sidebar() {
           {/* Solo ADMIN */}
           {tipo === "ADMIN" && (
             <>
-              <NavLink to="/admin" end className="text-yellow-300">🛠 Panel Admin</NavLink>
               <NavLink to="/admin/usuarios" className="text-yellow-300">👥 Gestión de Usuarios</NavLink>
               <NavLink to="/admin/peticiones" className="text-yellow-300">📩 Revisar Peticiones</NavLink>
               <NavLink to="/admin/ventajas" className="text-yellow-300">🎖 Gestionar Ventajas</NavLink>

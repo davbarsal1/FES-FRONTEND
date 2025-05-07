@@ -40,7 +40,7 @@ export default function LandingPage() {
       if (estadoServidor === "inactivo") {
         comprobarServidor();
       }
-    }, 30000); // Reintenta cada 30s si está inactivo
+    }, 30000);
 
     return () => {
       clearTimeout(timeoutId);
@@ -70,7 +70,7 @@ export default function LandingPage() {
 
       <main className="flex-1 flex flex-col items-center justify-center gap-32 py-20 px-4 scroll-smooth">
         {/* 🔰 Sección principal */}
-        <section id="inicio">
+        <section id="inicio" className="w-full flex flex-col items-center">
           <CenteredBox>
             <h2 className="text-3xl md:text-4xl font-extrabold text-black mb-4 tracking-widest drop-shadow">
               FUERZA ÉLITE SPARTAN
@@ -81,6 +81,23 @@ export default function LandingPage() {
             <p className="italic text-sm text-black mt-2">
               Únete a la fuerza que marca la diferencia.
             </p>
+
+            {/* Botones login y registro */}
+
+            <div className="mt-6 flex flex-col sm:flex-row gap-4 justify-center items-center">
+                                    <Link
+                                                    to="/login"
+                                                    className="bg-yellow-200 hover:bg-yellow-500 text-black font-semibold px-6 py-2 rounded shadow"
+                                                  >
+                                                    Iniciar Sesión
+                                                  </Link>
+                                                  <Link
+                                                    to="/register"
+                                                   className="bg-yellow-200 hover:bg-yellow-500 text-black font-semibold px-6 py-2 rounded shadow"
+                                                  >
+                                                    Registrarse
+                                                  </Link>
+                                </div>
           </CenteredBox>
         </section>
 
@@ -156,6 +173,7 @@ export default function LandingPage() {
         </section>
       </main>
 
+      {/* Estado servidor */}
       {renderEstadoServidor()}
     </div>
   );
