@@ -33,10 +33,7 @@ export default function PeticionesAdmin() {
       }
 
       if (peticion.rangoEspecifico) {
-        await axios.post(`${API}/user/cambiarMision`, {
-          username: peticion.username,
-          mision: peticion.rangoEspecifico
-        });
+        await axios.post(`${API}/user/cambiarMision?username=${peticion.username}&rangoEspecifico=${peticion.rangoEspecifico}`);
       }
 
       await axios.post(`${API}/peticion/aceptar?id=${id}`);

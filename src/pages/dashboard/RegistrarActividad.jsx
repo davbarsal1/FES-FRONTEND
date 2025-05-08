@@ -1,5 +1,4 @@
-// src/pages/dashboard/RegistrarActividad.jsx
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast } from "react-toastify";
 import { useUser } from "../../context/UserContext";
@@ -8,15 +7,43 @@ export default function RegistrarActividad() {
   const { usuario } = useUser();
   const [tipo, setTipo] = useState("JUEGO");
   const [guia, setGuia] = useState("");
+  const [usuarios, setUsuarios] = useState([]);
   const [participantes, setParticipantes] = useState([{ nombre: "", pda: 0.5 }]);
 
   const API = import.meta.env.PROD
-    ? "https://fes-backend.onrender.com/api/actividad"
-    : "http://localhost:8080/api/actividad";
+    ? "https://fes-backend.onrender.com/api/user"
+    : "http://localhost:8080/api/user";
+
+  useEffect(() => {
+    const cargar = async () => {
+      try {
+        const res = await axios.get(API);
+        setUsuarios(res.data);
+      } catch {
+        toast.error("Error al cargar usuarios");
+      }
+    };
+    cargar();
+  }, []);
 
   const handleChangeParticipante = (index, field, value) => {
     const updated = [...participantes];
-    updated[index][field] = field === "pda" ? parseFloat(value) : value;
+
+    if (field === "pda") {
+      const numericValue = parseFloat(value);
+      if (isNaN(numericValue) || numericValue < 0) {
+        toast.error("El valor de PDA debe ser mayor o igual a 0");
+        return;
+      }
+      if (numericValue > 1.5) {
+        toast.error("Excedido cantidad de PDA permitida por participante (máx 1.5)");
+        return;
+      }
+      updated[index][field] = numericValue;
+    } else {
+      updated[index][field] = value;
+    }
+
     setParticipantes(updated);
   };
 
@@ -39,7 +66,12 @@ export default function RegistrarActividad() {
     };
 
     try {
-      await axios.post(`${API}/registrar`, data);
+      await axios.post(
+        import.meta.env.PROD
+          ? "https://fes-backend.onrender.com/api/actividad/registrar"
+          : "http://localhost:8080/api/actividad/registrar",
+        data
+      );
       toast.success("✅ ¡Registro de actividad exitoso!");
       setGuia("");
       setParticipantes([{ nombre: "", pda: 0.5 }]);
@@ -47,6 +79,13 @@ export default function RegistrarActividad() {
       toast.error("Error al registrar actividad");
     }
   };
+
+  const sugerenciasUsuarios = (input) =>
+    input
+      ? usuarios
+          .filter((u) => u.username.toLowerCase().includes(input.toLowerCase()))
+          .slice(0, 5)
+      : [];
 
   return (
     <div className="p-6 max-w-4xl mx-auto mt-8 bg-black text-white rounded-xl border border-yellow-600 shadow">
@@ -67,7 +106,7 @@ export default function RegistrarActividad() {
           </select>
         </div>
 
-        <div>
+        <div className="relative">
           <label className="block font-semibold text-yellow-300 mb-1">Guía</label>
           <input
             type="text"
@@ -76,28 +115,63 @@ export default function RegistrarActividad() {
             className="w-full bg-gray-900 text-white p-2 rounded border border-yellow-500"
             placeholder="Nombre del guía"
           />
+          {sugerenciasUsuarios(guia).length > 0 && (
+            <ul className="absolute z-10 w-full bg-zinc-900 border border-yellow-500 mt-1 rounded shadow max-h-48 overflow-auto">
+              {sugerenciasUsuarios(guia).map((u) => (
+                <li
+                  key={u.username}
+                  onClick={() => setGuia(u.username)}
+                  className="px-4 py-2 hover:bg-yellow-500 hover:text-black cursor-pointer"
+                >
+                  {u.username}
+                </li>
+              ))}
+            </ul>
+          )}
         </div>
 
         <div>
           <label className="block font-semibold text-yellow-300 mb-1">Participantes</label>
           {participantes.map((p, i) => (
-            <div key={i} className="flex gap-3 mb-2">
-              <input
-                type="text"
-                placeholder="Usuario"
-                value={p.nombre}
-                onChange={(e) => handleChangeParticipante(i, "nombre", e.target.value)}
-                className="flex-1 bg-gray-900 text-white p-2 rounded border border-yellow-500"
-              />
-              <input
-                type="number"
-                step="0.1"
-                min="0"
-                placeholder="PDA"
-                value={p.pda}
-                onChange={(e) => handleChangeParticipante(i, "pda", e.target.value)}
-                className="w-24 bg-gray-900 text-white p-2 rounded border border-yellow-500"
-              />
+            <div key={i} className="mb-4">
+              <div className="flex gap-3">
+                <div className="relative flex-1">
+                  <input
+                    type="text"
+                    placeholder="Usuario"
+                    value={p.nombre}
+                    onChange={(e) => handleChangeParticipante(i, "nombre", e.target.value)}
+                    className="w-full bg-gray-900 text-white p-2 rounded border border-yellow-500"
+                  />
+                  {sugerenciasUsuarios(p.nombre).length > 0 && (
+                    <ul className="absolute z-10 w-full bg-zinc-900 border border-yellow-500 mt-1 rounded shadow max-h-48 overflow-auto">
+                      {sugerenciasUsuarios(p.nombre).map((u) => (
+                        <li
+                          key={u.username}
+                          onClick={() => {
+                            const updated = [...participantes];
+                            updated[i].nombre = u.username;
+                            setParticipantes(updated);
+                          }}
+                          className="px-4 py-2 hover:bg-yellow-500 hover:text-black cursor-pointer"
+                        >
+                          {u.username}
+                        </li>
+                      ))}
+                    </ul>
+                  )}
+                </div>
+                <input
+                  type="number"
+                  step="0.1"
+                  min="0"
+                  max="1.5"
+                  placeholder="PDA"
+                  value={p.pda}
+                  onChange={(e) => handleChangeParticipante(i, "pda", e.target.value)}
+                  className="w-24 bg-gray-900 text-white p-2 rounded border border-yellow-500"
+                />
+              </div>
             </div>
           ))}
           <button
