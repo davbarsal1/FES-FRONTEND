@@ -9,6 +9,7 @@ export default function GestionarVentajas() {
   const [busqueda, setBusqueda] = useState("");
   const [seleccionado, setSeleccionado] = useState("");
   const [ventaja, setVentaja] = useState("");
+  const [mostrarSugerencias, setMostrarSugerencias] = useState(false);
 
   const API = import.meta.env.PROD
     ? "https://fes-backend.onrender.com/api/user"
@@ -70,11 +71,13 @@ export default function GestionarVentajas() {
             value={busqueda}
             onChange={(e) => {
               setBusqueda(e.target.value);
-              setSeleccionado(""); // Resetear selección
+              setSeleccionado("");
+              setMostrarSugerencias(true);
             }}
+            onFocus={() => setMostrarSugerencias(true)}
             className="bg-black border border-yellow-500 p-2 rounded text-white w-full"
           />
-          {sugerencias.length > 0 && (
+          {mostrarSugerencias && sugerencias.length > 0 && (
             <ul className="absolute bg-zinc-900 border border-yellow-500 mt-1 rounded z-10 w-full max-h-48 overflow-auto shadow">
               {sugerencias.map((u) => (
                 <li
@@ -82,6 +85,7 @@ export default function GestionarVentajas() {
                   onClick={() => {
                     setSeleccionado(u.username);
                     setBusqueda(u.username);
+                    setMostrarSugerencias(false);
                   }}
                   className="px-4 py-2 hover:bg-yellow-500 hover:text-black cursor-pointer"
                 >

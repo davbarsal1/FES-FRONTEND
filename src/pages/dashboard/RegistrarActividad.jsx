@@ -9,6 +9,8 @@ export default function RegistrarActividad() {
   const [guia, setGuia] = useState("");
   const [usuarios, setUsuarios] = useState([]);
   const [participantes, setParticipantes] = useState([{ nombre: "", pda: 0.5 }]);
+  const [mostrarSugerenciasGuia, setMostrarSugerenciasGuia] = useState(false);
+  const [mostrarSugerenciasParticipantes, setMostrarSugerenciasParticipantes] = useState([false]);
 
   const API = import.meta.env.PROD
     ? "https://fes-backend.onrender.com/api/user"
@@ -28,6 +30,7 @@ export default function RegistrarActividad() {
 
   const handleChangeParticipante = (index, field, value) => {
     const updated = [...participantes];
+    const mostrar = [...mostrarSugerenciasParticipantes];
 
     if (field === "pda") {
       const numericValue = parseFloat(value);
@@ -42,19 +45,35 @@ export default function RegistrarActividad() {
       updated[index][field] = numericValue;
     } else {
       updated[index][field] = value;
+      mostrar[index] = true;
     }
 
     setParticipantes(updated);
+    setMostrarSugerenciasParticipantes(mostrar);
   };
 
   const agregarParticipante = () => {
     setParticipantes([...participantes, { nombre: "", pda: 0.5 }]);
+    setMostrarSugerenciasParticipantes([...mostrarSugerenciasParticipantes, false]);
   };
 
   const enviar = async (e) => {
     e.preventDefault();
+
+    const nombres = participantes.map((p) => p.nombre);
+
     if (!guia || participantes.some(p => !p.nombre)) {
       toast.error("Todos los campos deben completarse");
+      return;
+    }
+
+    if (new Set(nombres).size !== nombres.length) {
+      toast.error("No se pueden repetir participantes");
+      return;
+    }
+
+    if (nombres.includes(guia)) {
+      toast.error("El guía no puede ser también participante");
       return;
     }
 
@@ -75,6 +94,7 @@ export default function RegistrarActividad() {
       toast.success("✅ ¡Registro de actividad exitoso!");
       setGuia("");
       setParticipantes([{ nombre: "", pda: 0.5 }]);
+      setMostrarSugerenciasParticipantes([false]);
     } catch {
       toast.error("Error al registrar actividad");
     }
@@ -86,6 +106,8 @@ export default function RegistrarActividad() {
           .filter((u) => u.username.toLowerCase().includes(input.toLowerCase()))
           .slice(0, 5)
       : [];
+
+  const sugerenciasGuia = sugerenciasUsuarios(guia);
 
   return (
     <div className="p-6 max-w-4xl mx-auto mt-8 bg-black text-white rounded-xl border border-yellow-600 shadow">
@@ -111,16 +133,22 @@ export default function RegistrarActividad() {
           <input
             type="text"
             value={guia}
-            onChange={(e) => setGuia(e.target.value)}
+            onChange={(e) => {
+              setGuia(e.target.value);
+              setMostrarSugerenciasGuia(true);
+            }}
             className="w-full bg-gray-900 text-white p-2 rounded border border-yellow-500"
             placeholder="Nombre del guía"
           />
-          {sugerenciasUsuarios(guia).length > 0 && (
+          {mostrarSugerenciasGuia && sugerenciasGuia.length > 0 && (
             <ul className="absolute z-10 w-full bg-zinc-900 border border-yellow-500 mt-1 rounded shadow max-h-48 overflow-auto">
-              {sugerenciasUsuarios(guia).map((u) => (
+              {sugerenciasGuia.map((u) => (
                 <li
                   key={u.username}
-                  onClick={() => setGuia(u.username)}
+                  onClick={() => {
+                    setGuia(u.username);
+                    setMostrarSugerenciasGuia(false);
+                  }}
                   className="px-4 py-2 hover:bg-yellow-500 hover:text-black cursor-pointer"
                 >
                   {u.username}
@@ -132,48 +160,59 @@ export default function RegistrarActividad() {
 
         <div>
           <label className="block font-semibold text-yellow-300 mb-1">Participantes</label>
-          {participantes.map((p, i) => (
-            <div key={i} className="mb-4">
-              <div className="flex gap-3">
-                <div className="relative flex-1">
+          {participantes.map((p, i) => {
+            const sugerencias = sugerenciasUsuarios(p.nombre);
+            return (
+              <div key={i} className="mb-4">
+                <div className="flex gap-3">
+                  <div className="relative flex-1">
+                    <input
+                      type="text"
+                      placeholder="Usuario"
+                      value={p.nombre}
+                      onChange={(e) => handleChangeParticipante(i, "nombre", e.target.value)}
+                      onFocus={() => {
+                        const mostrar = [...mostrarSugerenciasParticipantes];
+                        mostrar[i] = true;
+                        setMostrarSugerenciasParticipantes(mostrar);
+                      }}
+                      className="w-full bg-gray-900 text-white p-2 rounded border border-yellow-500"
+                    />
+                    {mostrarSugerenciasParticipantes[i] && sugerencias.length > 0 && (
+                      <ul className="absolute z-10 w-full bg-zinc-900 border border-yellow-500 mt-1 rounded shadow max-h-48 overflow-auto">
+                        {sugerencias.map((u) => (
+                          <li
+                            key={u.username}
+                            onClick={() => {
+                              const updated = [...participantes];
+                              const mostrar = [...mostrarSugerenciasParticipantes];
+                              updated[i].nombre = u.username;
+                              mostrar[i] = false;
+                              setParticipantes(updated);
+                              setMostrarSugerenciasParticipantes(mostrar);
+                            }}
+                            className="px-4 py-2 hover:bg-yellow-500 hover:text-black cursor-pointer"
+                          >
+                            {u.username}
+                          </li>
+                        ))}
+                      </ul>
+                    )}
+                  </div>
                   <input
-                    type="text"
-                    placeholder="Usuario"
-                    value={p.nombre}
-                    onChange={(e) => handleChangeParticipante(i, "nombre", e.target.value)}
-                    className="w-full bg-gray-900 text-white p-2 rounded border border-yellow-500"
+                    type="number"
+                    step="0.1"
+                    min="0"
+                    max="1.5"
+                    placeholder="PDA"
+                    value={p.pda}
+                    onChange={(e) => handleChangeParticipante(i, "pda", e.target.value)}
+                    className="w-24 bg-gray-900 text-white p-2 rounded border border-yellow-500"
                   />
-                  {sugerenciasUsuarios(p.nombre).length > 0 && (
-                    <ul className="absolute z-10 w-full bg-zinc-900 border border-yellow-500 mt-1 rounded shadow max-h-48 overflow-auto">
-                      {sugerenciasUsuarios(p.nombre).map((u) => (
-                        <li
-                          key={u.username}
-                          onClick={() => {
-                            const updated = [...participantes];
-                            updated[i].nombre = u.username;
-                            setParticipantes(updated);
-                          }}
-                          className="px-4 py-2 hover:bg-yellow-500 hover:text-black cursor-pointer"
-                        >
-                          {u.username}
-                        </li>
-                      ))}
-                    </ul>
-                  )}
                 </div>
-                <input
-                  type="number"
-                  step="0.1"
-                  min="0"
-                  max="1.5"
-                  placeholder="PDA"
-                  value={p.pda}
-                  onChange={(e) => handleChangeParticipante(i, "pda", e.target.value)}
-                  className="w-24 bg-gray-900 text-white p-2 rounded border border-yellow-500"
-                />
               </div>
-            </div>
-          ))}
+            );
+          })}
           <button
             type="button"
             onClick={agregarParticipante}

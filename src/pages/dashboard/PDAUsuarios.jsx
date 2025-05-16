@@ -9,23 +9,33 @@ export default function PDAUsuarios() {
   const [busqueda, setBusqueda] = useState("");
 
   const API = import.meta.env.PROD
-    ? "https://fes-backend.onrender.com/api/actividad/pdas"
-    : "http://localhost:8080/api/actividad/pdas";
+    ? "https://fes-backend.onrender.com/api/actividad"
+    : "http://localhost:8080/api/actividad";
+
+  const cargar = async () => {
+    try {
+      const res = await axios.get(`${API}/pdas`);
+      const array = Object.entries(res.data).map(([username, pda]) => ({
+        username,
+        pda,
+      }));
+      setUsuarios(array);
+    } catch {
+      toast.error("Error al cargar PDAs");
+    }
+  };
+
+  const reiniciar = async () => {
+    try {
+      await axios.delete(`${API}/reiniciar`);
+      toast.success("Historial reiniciado");
+      cargar();
+    } catch {
+      toast.error("Error al reiniciar historial");
+    }
+  };
 
   useEffect(() => {
-    const cargar = async () => {
-      try {
-        const res = await axios.get(API);
-        const array = Object.entries(res.data).map(([username, pda]) => ({
-          username,
-          pda,
-        }));
-        setUsuarios(array);
-      } catch {
-        toast.error("Error al cargar PDAs");
-      }
-    };
-
     cargar();
   }, []);
 
@@ -36,13 +46,21 @@ export default function PDAUsuarios() {
         PDAs por Usuario
       </h2>
 
-      <input
-        type="text"
-        placeholder="Buscar usuario..."
-        value={busqueda}
-        onChange={(e) => setBusqueda(e.target.value)}
-        className="mb-4 px-4 py-2 border rounded w-full max-w-sm shadow bg-gray-100 text-black"
-      />
+      <div className="flex justify-between items-center mb-4 flex-wrap gap-2">
+        <input
+          type="text"
+          placeholder="Buscar usuario..."
+          value={busqueda}
+          onChange={(e) => setBusqueda(e.target.value)}
+          className="px-4 py-2 border rounded shadow bg-gray-100 text-black w-full max-w-sm"
+        />
+        <button
+          onClick={reiniciar}
+          className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow"
+        >
+          Reiniciar Historial
+        </button>
+      </div>
 
       {usuarios.length === 0 ? (
         <p>No hay registros de PDAs.</p>
