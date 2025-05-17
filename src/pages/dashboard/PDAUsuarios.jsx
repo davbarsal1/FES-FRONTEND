@@ -3,11 +3,12 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { toast, ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { useUser } from "../../context/UserContext";
 
 export default function PDAUsuarios() {
   const [usuarios, setUsuarios] = useState([]);
   const [busqueda, setBusqueda] = useState("");
-
+  const { usuario } = useUser();
   const API = import.meta.env.PROD
     ? "https://fes-backend.onrender.com/api/actividad"
     : "http://localhost:8080/api/actividad";
@@ -54,12 +55,14 @@ export default function PDAUsuarios() {
           onChange={(e) => setBusqueda(e.target.value)}
           className="px-4 py-2 border rounded shadow bg-gray-100 text-black w-full max-w-sm"
         />
+        {usuario?.userType === "ADMIN" && (
         <button
           onClick={reiniciar}
           className="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded shadow"
         >
           Reiniciar Historial
         </button>
+        )}
       </div>
 
       {usuarios.length === 0 ? (
