@@ -112,8 +112,9 @@ export default function TiempoAdmin() {
         placeholder="Buscar por usuario..."
         value={busqueda}
         onChange={(e) => setBusqueda(e.target.value)}
-        className="mb-6 px-4 py-2 border border-gray-300 rounded w-full max-w-sm shadow"
+        className="mb-6 px-4 py-2 border border-gray-300 rounded w-full max-w-sm shadow text-black"
       />
+
 
       {usuarios.length === 0 ? (
         <p>No hay usuarios aún.</p>
