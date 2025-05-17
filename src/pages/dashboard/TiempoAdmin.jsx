@@ -99,12 +99,14 @@ export default function TiempoAdmin() {
     <div className="p-6 max-w-[1600px] mx-auto">
       <div className="flex justify-between items-center mb-6">
         <h2 className="text-3xl font-bold text-yellow-400">Control de Tiempo en Sala</h2>
+        {usuario?.userType === "ADMIN" && (
         <button
           onClick={reiniciar}
           className="bg-red-600 hover:bg-red-700 text-white px-4 py-2 rounded shadow"
         >
           Reiniciar Tiempos
         </button>
+        )}
       </div>
 
       <input
