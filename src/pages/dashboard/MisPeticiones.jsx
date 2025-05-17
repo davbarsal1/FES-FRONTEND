@@ -50,6 +50,7 @@ export default function MisPeticiones() {
               <tr className="text-center">
                 <th className="px-4 py-3">Rango</th>
                 <th className="px-4 py-3">Tipo Usuario</th>
+                <th className="px-4 py-3">Misión</th>
                 <th className="px-4 py-3">Motivo</th>
                 <th className="px-4 py-3">Estado</th>
               </tr>
@@ -62,6 +63,7 @@ export default function MisPeticiones() {
                 >
                   <td className="px-4 py-2">{p.rango ?? "-"}</td>
                   <td className="px-4 py-2">{p.userType ?? "-"}</td>
+                  <td className="px-4 py-2">{p.rangoEspecifico ?? "-"}</td>
                   <td className="px-4 py-2 text-left">{p.texto}</td>
                   <td className={`px-4 py-2 ${estadoColor(p.estado)}`}>{p.estado}</td>
                 </tr>
