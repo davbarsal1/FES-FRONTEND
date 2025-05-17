@@ -94,7 +94,7 @@ export default function Usuarios() {
       }
 
       if (cambio?.rangoEspecifico !== undefined) {
-        await axios.post(`${API_URL}/cambiarMision?username=${username}&rangoEspecifico=${cambio.rangoEspecifico}`);
+        await axios.post(`${API_URL}/cambiarMision?username=${encodeURIComponent(username)}&rangoEspecifico=${encodeURIComponent(cambio.rangoEspecifico)}`);
       }
 
       toast.success(`Cambios aplicados a ${username}`);

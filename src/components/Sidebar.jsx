@@ -23,14 +23,15 @@ export default function Sidebar() {
     <>
       <NavLink to="/admin/tiempo" onClick={() => setIsOpen(false)}>⏲ Control de Sala</NavLink>
       <NavLink to="/admin/pda-usuarios" onClick={() => setIsOpen(false)}>📊 Ver PDAs</NavLink>
-      <NavLink to="/admin/registrar-actividad" onClick={() => setIsOpen(false)}>📝 Registrar Actividad</NavLink>
-      <NavLink to="/admin/registrar-publicidad" onClick={() => setIsOpen(false)}>📣 Registrar Publicidad</NavLink>
+
       <NavLink to="/admin/historial-publicidad" onClick={() => setIsOpen(false)}>📜 Historial Publicidad</NavLink>
     </>
   );
 
   const adminLinks = tipo === "ADMIN" && (
     <>
+      <NavLink to="/admin/registrar-actividad" onClick={() => setIsOpen(false)}>📝 Registrar Actividad</NavLink>
+      <NavLink to="/admin/registrar-publicidad" onClick={() => setIsOpen(false)}>📣 Registrar Publicidad</NavLink>
       <NavLink to="/admin/usuarios" onClick={() => setIsOpen(false)}>👥 Gestión de Usuarios</NavLink>
       <NavLink to="/admin/peticiones" onClick={() => setIsOpen(false)}>📩 Revisar Peticiones</NavLink>
       <NavLink to="/admin/ventajas" onClick={() => setIsOpen(false)}>🎖 Gestionar Ventajas</NavLink>
