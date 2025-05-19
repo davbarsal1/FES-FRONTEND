@@ -162,7 +162,7 @@ export default function Usuarios() {
                 )
                 .map((u) => (
                   <tr key={u.username} className="text-center border-t border-yellow-800">
-                    <td className="px-4 py-2">{u.username}</td>
+                    <td className="px-4 py-2">{u.habbousername}</td>
                     <td className="px-4 py-2">{u.email}</td>
                     <td className="px-4 py-2">{u.userType ?? "Sin tipo"}</td>
                     <td className="px-4 py-2">
