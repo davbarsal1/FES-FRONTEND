@@ -135,7 +135,7 @@ export default function TiempoAdmin() {
             <tbody>
               {usuarios
                 .filter((u) =>
-                  u.username.toLowerCase().includes(busqueda.toLowerCase())
+                  u.habbousername.toLowerCase().includes(busqueda.toLowerCase())
                 )
                 .map((u) => (
                   <tr key={u.username} className="border-t border-gray-800 text-center">
