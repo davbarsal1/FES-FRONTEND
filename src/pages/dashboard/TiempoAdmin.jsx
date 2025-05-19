@@ -135,11 +135,11 @@ export default function TiempoAdmin() {
             <tbody>
               {usuarios
                 .filter((u) =>
-                  u.habbousername.toLowerCase().includes(busqueda.toLowerCase())
+                  u.username.toLowerCase().includes(busqueda.toLowerCase())
                 )
                 .map((u) => (
                   <tr key={u.username} className="border-t border-gray-800 text-center">
-                    <td className="px-4 py-3">{u.habbousername}</td>
+                    <td className="px-4 py-3">{u.username}</td>
                     <td className="px-4 py-3">{formatearTiempo(u.segundosTotales)}</td>
                     <td className="px-4 py-3 space-x-2">
                       <button
